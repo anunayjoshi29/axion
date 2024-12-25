@@ -19,8 +19,9 @@ module.exports = {
     },
     email: {
         path: 'email',
-        type: 'string',
+        type: 'String',
         length: {min:3, max: 100},
+        regex: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
     },
     title: {
         path: 'title',
@@ -31,6 +32,11 @@ module.exports = {
         path: 'label',
         type: 'string',
         length: {min: 3, max: 100}
+    },
+    mongoId: {
+        path: 'mongoId',
+        type: 'string',
+        regex: /^[0-9a-fA-F]{24}$/
     },
     shortDesc: {
         path: 'desc',
@@ -46,6 +52,21 @@ module.exports = {
         path: 'url',
         type: 'string',
         length: {min: 9, max: 300},
+    },
+    name: {
+        path: 'name',
+        type: 'string',
+        length: {min: 3, max: 300},
+    },
+    address: {
+        path: 'address',
+        type: 'string',
+        length: {min: 5, max: 300},
+    },
+    accessControl: {
+        path: 'accessControl',
+        type: 'String',
+        regex: /^(user|super|school:.*)$/,
     },
     emoji: {
         path: 'emoji',
@@ -80,10 +101,6 @@ module.exports = {
     phone: {
         type: 'String',
         length: 13,
-    },
-    email: {
-        type: 'String',
-        regex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     },
     number: {
         type: 'Number',

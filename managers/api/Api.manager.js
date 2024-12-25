@@ -114,7 +114,8 @@ module.exports = class ApiHandler {
                 result = await targetModule[`${fnName}`](data);
             } catch (err){
                 console.log(`error`, err);
-                result.error = `${fnName} failed to execute`;
+                result.error = `${fnName} failed to execute; ${err.message}`;
+                result.statusCode = 400;
             }
     
         if(cb)cb(result);
@@ -155,19 +156,22 @@ module.exports = class ApiHandler {
                 ...body, 
                 ...results,
                 res,
+                context,
             }});
             if(!result)result={}
+
+            let code = result.statusCode || 200;
 
             if(result.selfHandleResponse){
                 // do nothing if response handeled
             } else {
                 
                 if(result.errors){
-                    return this.managers.responseDispatcher.dispatch(res, {ok: false, errors: result.errors});
+                    return this.managers.responseDispatcher.dispatch(res, {ok: false, errors: result.errors, code});
                 } else if(result.error){
-                    return this.managers.responseDispatcher.dispatch(res, {ok: false, message: result.error});
+                    return this.managers.responseDispatcher.dispatch(res, {ok: false, message: result.error, code});
                 } else {
-                    return this.managers.responseDispatcher.dispatch(res, {ok:true, data: result});
+                    return this.managers.responseDispatcher.dispatch(res, {ok:true, data: result, code});
                 }
             }
         }});

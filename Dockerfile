@@ -1,0 +1,17 @@
+FROM node:18
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+ENV CORTEX_PREFIX='CORTEX'
+ENV LONG_TOKEN_SECRET='LONG_TOKEN_SECRET'
+ENV SHORT_TOKEN_SECRET='SHORT_TOKEN_SECRET'
+ENV NACL_SECRET='NACL_SECRET'
+ENV REDIS_URI='redis://redis:6379'
+ENV MONGO_URI='mongodb://mongo:27017/axion'
+
+CMD ["npm", "start"]
