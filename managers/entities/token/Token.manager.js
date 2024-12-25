@@ -60,6 +60,7 @@ module.exports = class TokenManager {
 
     /** generate shortId based on a longId */
     v1_createShortToken({__headers, __device}){
+        console.log('creating short token');
         const token = __headers.token;
         if(!token)return {error: 'missing token '};
         console.log('found token', token);

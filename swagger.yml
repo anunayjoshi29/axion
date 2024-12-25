@@ -1,0 +1,294 @@
+openapi: 3.1.0
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: School Management System
+  description: School Management System API
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: token
+tags:
+  - name: Classroom
+  - name: School
+  - name: Student
+  - name: User
+  
+paths:
+
+  ## Classroom APIs ##
+  /api/classroom/create:
+    post:
+      summary: Create a new classroom in your school. You must be a school admin to create a classroom.
+      tags:
+        - Classroom
+      security:
+        - api_key: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+              example:
+                label: 12C
+      responses:
+        '200':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized 
+
+  /api/classroom/read:
+    get:
+      summary: Get all the classrooms of your school
+      tags:
+        - Classroom
+      security:
+        - api_key: []
+      responses:
+        '200':
+          description: Successful request
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized 
+
+  /api/classroom/delete:
+    delete:
+      summary: Delete a classroom by its label from your school
+      tags:
+        - Classroom
+      security:
+        - api_key: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+              example:
+                label: 12C
+      responses:
+        '200':
+          description: Successful request
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized 
+      
+
+  ## School APIs ##
+  /api/school/create:
+    post:
+      summary: Create a new school. You need to be a super admin to do that.
+      tags:
+        - School
+      security:
+        - api_key: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                address:
+                  type: string
+                url:
+                  type: string
+              example:
+                name: GUC
+                address: Cairo, Egypt
+                url: guc.edu.eg
+      responses:
+        '200':
+          description: Created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized 
+
+  /api/school/read/{name}:
+    get:
+      summary: Read school info by its name
+      tags:
+        - School
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          example: GUC
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+
+  /api/school/update/:
+    patch:
+      summary: Find a school by its name and update its URL and/or address
+      tags:
+        - School
+      security:
+        - api_key: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                address:
+                  type: string
+                url:
+                  type: string
+              example:
+                name: GUC
+                address: Cairo, Egypt
+                url: guc.edu.eg
+      responses:
+        '200':
+          description: Response successful
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized 
+
+  /api/school/delete/{name}:
+    delete:
+      summary: Delete a school by its name. You must be a super admin.
+      tags:
+        - School
+      security:
+        - api_key: []
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          example: GUC
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+
+  ## User & tokens APIs ##
+  /api/user/createUser:
+    post:
+      summary: Register a new user
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                username:
+                  type: string
+              example:
+                email: 'h@h.com'
+                password: '********'
+                username: Hesham Moneer
+      responses:
+        '200':
+          description: Created successfully
+        '400':
+          description: Bad request
+
+  /api/user/loginUser:
+    post:
+      summary: Login using registered user credentials
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              example:
+                email: 'h@h.com'
+                password: '********'
+      responses:
+        '200':
+          description: Logged in successfully
+        '400':
+          description: Bad request
+
+  /api/user/updateUserAccessControl:
+    post:
+      summary: Update the user access right. You must be a super admin.
+      tags:
+        - User
+      security:
+        - api_key: []
+      requestBody:
+        description: 'User access rights: "user" => no admin rights, "school:${school_name}" => school admin, "super" => super admin'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                accessControl:
+                  type: string
+              example:
+                email: 'h@h.com'
+                accessControl: user
+      responses:
+        '200':
+          description: Successful request
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized 
+
+
+  /api/token/v1_createShortToken:
+    post:
+      summary: Generate a short token
+      tags:
+        - User
+      security:
+        - api_key: []
+      responses:
+        '200':
+          description: Token generated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized 
